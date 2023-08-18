@@ -1,25 +1,45 @@
-interface User {
-    name: string,
-    age: number
+interface IPayment {
+  sum: number;
+  from: number;
+  to: number;
 }
 
-interface Admin {
-    name: string,
-    role: string
+enum PaymentStatus {
+  Success = "success",
+  Failed = "failed",
 }
 
-function isAdmin(obj: User | Admin): obj is Admin {
-    return 'role' in obj
+interface IPaymentRequest extends IPayment {}
+
+interface IDataSuccess extends IPayment {
+  databaseId: number;
 }
 
-function isAdminAlternative(obj: User | Admin): obj is Admin {
-    return (obj as Admin).role !== undefined
+interface IDataFailed {
+  errorMessage: string;
+  errorCode: number;
 }
 
-function setRoleZero(x: any) {
-    if (isAdmin(x)) {
-        x.role = '0'
-    } else {
-        throw new Error('Not found')
-    }
+interface IResponseSuccess {
+  status: PaymentStatus.Success;
+  data: IDataSuccess;
+}
+
+interface IResponseFailed {
+  status: PaymentStatus.Failed;
+  data: IDataFailed;
+}
+
+function isSuccess(
+  res: IResponseSuccess | IResponseFailed
+): res is IResponseSuccess {
+  return res.status === PaymentStatus.Success;
+}
+
+function getIdFromData(res: IResponseSuccess | IResponseFailed): number {
+  if (isSuccess(res)) {
+    return res.data.databaseId;
+  } else {
+    throw new Error(res.data.errorMessage);
+  }
 }
