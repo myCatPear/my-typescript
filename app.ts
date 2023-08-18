@@ -1,34 +1,25 @@
-/* Запрос */
-// {
-// 	"topicId": 5,
-// 	"status": "published" // "draft", "deleted"
-// }
-/* Ответ */
-// [
-// 	{
-// 		"question": "Как осуществляется доставка?",
-// 		"answer": "быстро!",
-// 		"tags": [
-// 			"popular",
-// 			"new"
-// 		],
-// 		"likes": 3,
-// 		"status": "published"
-// 	}
-// ]
-
-enum QuestionStatus {
-    Published = 'published',
-    Draft = 'Draft',
-    Deleted = 'Deleted'
+interface User {
+    name: string,
+    age: number
 }
 
-// Промис не стал дописывать
-async function getFaqs(req:{topicId: number, status: QuestionStatus}):Promise<{question: string}> {
-	const res = await fetch('/faqs', {
-		method: 'POST',
-		body: JSON.stringify(req)
-	});
-	const data = await res.json();
-	return data;
+interface Admin {
+    name: string,
+    role: string
+}
+
+function isAdmin(obj: User | Admin): obj is Admin {
+    return 'role' in obj
+}
+
+function isAdminAlternative(obj: User | Admin): obj is Admin {
+    return (obj as Admin).role !== undefined
+}
+
+function setRoleZero(x: any) {
+    if (isAdmin(x)) {
+        x.role = '0'
+    } else {
+        throw new Error('Not found')
+    }
 }
