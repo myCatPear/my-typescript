@@ -1,45 +1,14 @@
-interface IPayment {
-  sum: number;
-  from: number;
-  to: number;
+function logMiddleware<T>(data: T): T {
+  console.log(data);
+  return data;
 }
 
-enum PaymentStatus {
-  Success = "success",
-  Failed = "failed",
+const res = logMiddleware<number>(10);
+const res2 = logMiddleware<string>("q");
+
+function getSplitedHaldf<T>(data: Array<T>): Array<T> {
+  const l = data.length / 2;
+  return data.splice(0, l);
 }
 
-interface IPaymentRequest extends IPayment {}
-
-interface IDataSuccess extends IPayment {
-  databaseId: number;
-}
-
-interface IDataFailed {
-  errorMessage: string;
-  errorCode: number;
-}
-
-interface IResponseSuccess {
-  status: PaymentStatus.Success;
-  data: IDataSuccess;
-}
-
-interface IResponseFailed {
-  status: PaymentStatus.Failed;
-  data: IDataFailed;
-}
-
-function isSuccess(
-  res: IResponseSuccess | IResponseFailed
-): res is IResponseSuccess {
-  return res.status === PaymentStatus.Success;
-}
-
-function getIdFromData(res: IResponseSuccess | IResponseFailed): number {
-  if (isSuccess(res)) {
-    return res.data.databaseId;
-  } else {
-    throw new Error(res.data.errorMessage);
-  }
-}
+getSplitedHaldf([32,323,1233])
