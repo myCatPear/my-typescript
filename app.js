@@ -1,17 +1,22 @@
 "use strict";
-var PaymentStatus;
-(function (PaymentStatus) {
-    PaymentStatus["Success"] = "success";
-    PaymentStatus["Failed"] = "failed";
-})(PaymentStatus || (PaymentStatus = {}));
-function isSuccess(res) {
-    return res.status === PaymentStatus.Success;
+const data = [
+    { group: 1, name: "Denis" },
+    { group: 1, name: "Anna" },
+    { group: 2, name: "Kostya" },
+];
+function group(array, key) {
+    return array.reduce((map, item) => {
+        const itemKey = item[key];
+        let currentElement = map[itemKey];
+        if (Array.isArray(currentElement)) {
+            currentElement.push(item);
+        }
+        else {
+            currentElement = [item];
+        }
+        map[itemKey] = currentElement;
+        return map;
+    }, {});
 }
-function getIdFromData(res) {
-    if (isSuccess(res)) {
-        return res.data.databaseId;
-    }
-    else {
-        throw new Error(res.data.errorMessage);
-    }
-}
+const res = group(data, "group");
+console.log(res);

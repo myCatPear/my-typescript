@@ -1,15 +1,7 @@
-interface IUser {
-  name: string;
-  age: number;
+const user = {
+  name: 'denis',
+  age: 33
 }
 
-function getValue<T, K extends keyof T>(obj: T, key: K) {
-  return obj[key];
-}
+type keyOFUser = keyof typeof user;
 
-const user: IUser = {
-  age: 11,
-  name: "Da",
-};
-
-const userName = getValue(user, "name");
