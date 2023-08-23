@@ -1,33 +1,25 @@
-interface Role {
+interface IForm {
   name: string;
+  password: string;
 }
 
-interface Permission {
-  endDate: Date;
-}
-
-interface User {
-  name: string;
-  roles: Role[];
-  permission: Permission;
-}
-
-const user: User = {
+const form: IForm = {
   name: "Denis",
-  roles: [],
-  permission: {
-    endDate: new Date(),
-  },
+  password: "123",
 };
 
-const nameUSer = user["name"];
-const roleNames = "roles";
+const formValidation: Validation<IForm> = {
+  name: { isValid: true },
+  password: { isValid: false, errorMessage: "xxx" },
+};
 
-type rolesType = User["roles"];
-type rolesType2 = User[typeof roleNames];
-
-type roleType = User["roles"][number];
-type dateType = User["permission"]["endDate"];
-
-const roles = ["admin", "user"] as const;
-type roleTypes = (typeof roles)[number];
+type Validation<T> = {
+  [K in keyof T]:
+    | {
+        isValid: true;
+      }
+    | {
+        isValid: false;
+        errorMessage: string;
+      };
+};
