@@ -1,25 +1,10 @@
-interface IForm {
+interface User {
   name: string;
-  password: string;
+  age?: number;
 }
 
-const form: IForm = {
-  name: "Denis",
-  password: "123",
-};
+type p = Partial<User>;
 
-const formValidation: Validation<IForm> = {
-  name: { isValid: true },
-  password: { isValid: false, errorMessage: "xxx" },
-};
+type r = Required<User>;
 
-type Validation<T> = {
-  [K in keyof T]:
-    | {
-        isValid: true;
-      }
-    | {
-        isValid: false;
-        errorMessage: string;
-      };
-};
+type read = Readonly<User>;
